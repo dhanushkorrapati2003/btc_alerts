@@ -1,0 +1,58 @@
+services:
+  web:
+    build: ./api_endpoints
+    container_name: django_app
+
+    depends_on:
+      - postgres
+    environment:
+      - DJANGO_SETTINGS_MODULE=btc_alerts.settings
+      - DATABASE_NAME=mydatabase
+      - DATABASE_USER=myuser
+      - DATABASE_PASSWORD=mypassword
+      - DATABASE_HOST=postgres_db
+      - DATABASE_PORT=5432
+    ports:
+      - "8000:8000"
+
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  price_monitor:
+    build: ./price_monitor
+    command: python monitor.py
+    volumes:
+      - ./price_monitor:/price_monitor
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      DATABASE_SETTINGS__DBNAME: mydatabase
+      DATABASE_SETTINGS__USER: myuser
+      DATABASE_SETTINGS__PASSWORD: mypassword
+      DATABASE_SETTINGS__HOST: postgres_db
+      DATABASE_SETTINGS__PORT: '5432'
+      
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # RabbitMQ default port
+      - "15672:15672" # RabbitMQ Management Plugin port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  postgres_data:
