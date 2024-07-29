@@ -69,7 +69,9 @@ def handle_price_update(price):
                 'alert_id': alert_id,
                 'target_price': str(target_price),
                 'trigger_condition': trigger_condition,
-                'price': price
+                'price': price,
+                'email' : email,
+                'state' : state
             }
             # Push alert to RabbitMQ
             push_to_rabbitmq(alert_message)

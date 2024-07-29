@@ -32,16 +32,16 @@ def callback(ch, method, properties, body):
 
     # Parse the message
     message = json.loads(body)
-    subject = 'BTC Price reached.'
-    body = message['body']
-    to_email = message['to_email']
+    subject = 'BTC Alert'
+    body = 'Current price of BTC reached the target price ' + message['target_price']
+    to_email = message['email']
 
     # SMTP server configuration
-    smtp_server = 'smtp.example.com'
+    smtp_server = 'smtp.google.com'
     smtp_port = 587
-    smtp_user = 'your_smtp_user'
-    smtp_password = 'your_smtp_password'
-    from_email = 'your_email@example.com'
+    smtp_user = 'user'
+    smtp_password = 'password'
+    from_email = 'alert@gmail.com'
 
     # Send the email
     send_email(subject, body, to_email, from_email, smtp_server, smtp_port, smtp_user, smtp_password)
