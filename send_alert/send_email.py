@@ -3,6 +3,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import pika
 import json
+import os
     
 def send_email(subject, body, to_email, from_email, smtp_server, smtp_port, smtp_user, smtp_password):
     # Create the email
@@ -48,8 +49,8 @@ def callback(ch, method, properties, body):
 
 def main():
     # RabbitMQ server configuration
-    rabbitmq_host = 'localhost'
-    rabbitmq_queue = 'email_queue'
+    rabbitmq_host = os.getenv('RABBITMQ_HOST')
+    rabbitmq_queue = os.getenv('RABBITMQ_QUEUE')
 
     # Connect to RabbitMQ
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))

@@ -6,8 +6,8 @@ from psycopg2 import sql
 import os
 
 # RabbitMQ setup
-RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost')
-RABBITMQ_QUEUE = 'alert_queue'
+RABBITMQ_HOST = os.getenv('RABBITMQ_HOST')
+RABBITMQ_QUEUE = os.getenv('RABBITMQ_QUEUE')
 
 # PostgreSQL setup
 DATABASE_SETTINGS = {
